@@ -12,7 +12,7 @@ let title = {
   x: titleMeasurements.left,
   y: titleMeasurements.top,
   width: titleMeasurements.width,
-  height: titleMeasurements.height
+  height: 10
 }
 class Particle {
   constructor(x, y){
@@ -31,6 +31,17 @@ class Particle {
     this.weight += 0.05
     this.y += this.weight
     this.x += this.directionX
+
+    // check for collision between each partivle and title element
+    if(
+      this.x < title.x + title.width &&
+      this.x + this.size > title.x &&
+      this.y < title.y + title.height &&
+      this.y + this.size > title.y
+    ) {
+        this.y -= 3;
+        this.weight *= -0.5
+    }
   }
   draw(){
     ctx.fillStyle = 'purple'
@@ -41,6 +52,7 @@ class Particle {
   }
 }
 function init(){
+  particlesArrary = []
   for(let i = 0; i < numberOfParticles; i++){
     const x = Math.random() * canvas.width
     const y = Math.random() * canvas.height
@@ -50,7 +62,6 @@ function init(){
 init()
 // const particle1 = new Particle(400, 10)
 // const particle2 = new Particle(100, 10)
-
 function animate(){
   ctx.fillStyle = 'rgba(255, 255, 255, 0.01)'
   ctx.fillRect(0, 0, canvas.width, canvas.height)
@@ -58,7 +69,20 @@ function animate(){
     particlesArrary[i].update()
     particlesArrary[i].draw()
   }
-  ctx.fillRext(title.x, title.y, title.width, title.height)
+  // ctx.fillRect(title.x, title.y, title.width, title.height)
   requestAnimationFrame(animate)
 }
 animate()
+
+window.addEventListener('resize', function() {
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+  titleMeasurements = titleElement.getBoundingClientRect()
+  title = {
+    x: titleMeasurements.left,
+    y: titleMeasurements.top,
+    width: titleMeasurements.width,
+    height: 10
+  }
+  init()
+})
