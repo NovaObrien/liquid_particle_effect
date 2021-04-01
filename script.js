@@ -15,6 +15,13 @@ class Particle {
   update(){
     this.weight += 0.01
     this.y += this.weight
-    
+
+  }
+  draw(){
+    ctx.fillStyle = 'red'
+    ctx.beginPath()
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2)
+    ctx.closePath()
+    ctx.fill()
   }
 }
